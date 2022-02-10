@@ -62,14 +62,17 @@ CREATE TABLE IF NOT EXISTS cul_ampolla.clients(
     nom 			VARCHAR(50),
     telefon			VARCHAR(20) NULL,
     mail			VARCHAR(60) NULL,
+    id_adreca		BIGINT UNSIGNED NULL,
     data_registre 	DATE,
     id_client_rec	BIGINT UNSIGNED NULL,
-    FOREIGN KEY (id_client_rec) REFERENCES cul_ampolla.clients(id_client)  
+    FOREIGN KEY (id_client_rec) REFERENCES cul_ampolla.clients(id_client),
+    FOREIGN KEY (id_adreca) REFERENCES cul_ampolla.adreces(id_adreca)
 )character set UTF8MB4;
 
 # ULLERA {id_ullera, id_proveidor_, grad_esquerra, grad_dreta, color_montura, color_vidre_dret, color_vidre_esquerra, id_montura, preu} ON {id_montura} REF MONTURA
 CREATE TABLE IF NOT EXISTS cul_ampolla.ulleres(
 	id_ulleres 		SERIAL PRIMARY KEY,
+    id_proveidor	BIGINT UNSIGNED, 
     grad_esquerra	DECIMAL(5,2),
     grad_dreta		DECIMAL(5,2),
     color_montura	VARCHAR(10),
@@ -77,7 +80,8 @@ CREATE TABLE IF NOT EXISTS cul_ampolla.ulleres(
     color_vidre_dre VARCHAR(10),
     preu			DECIMAL(10,4),
     id_montura		BIGINT UNSIGNED,
-    FOREIGN KEY(id_montura) REFERENCES cul_ampolla.montures(id_montura)   
+    FOREIGN KEY(id_montura) REFERENCES cul_ampolla.montures(id_montura),
+    FOREIGN KEY(id_proveidor) REFERENCES cul_ampolla.proveidors(id_proveidor)
 )character set UTF8MB4;
 
 # COMPRA {_id_compra, empleat, id_client, id_ullera} ON {id_client} REF CLIENT & ON {id_ullera} REF ULLERA
@@ -117,12 +121,12 @@ INSERT INTO cul_ampolla.montures(nom)
 VALUES("flotant"), ("pasta"), ("metàl.lica");
 
 #metemos clientes
-INSERT INTO cul_ampolla.clients(nom, telefon, mail, data_registre, id_client_rec)
-VALUES ("Pepe", "12222", "pepe@mail.es", "2001-02-02", null), ("Maria", null, null, "2044-02-13", 1);
+INSERT INTO cul_ampolla.clients(nom, telefon, mail, id_adreca, data_registre, id_client_rec)
+VALUES ("Pepe", "12222", "pepe@mail.es", null, "2001-02-02", null), ("Maria", null, null, 2, "2044-02-13", 1);
 
 #metemos ulleres
-INSERT INTO cul_ampolla.ulleres(grad_esquerra, grad_dreta, color_montura, color_vidre_esq, color_vidre_dre, preu, id_montura)
-VALUES (0.25, 1.25, "vermell", null, null, 21115.14, 1), (8.75, -7.00, null, "blau", "blau", 12.25, 3);
+INSERT INTO cul_ampolla.ulleres(id_proveidor, grad_esquerra, grad_dreta, color_montura, color_vidre_esq, color_vidre_dre, preu, id_montura)
+VALUES (1, 0.25, 1.25, "vermell", null, null, 21115.14, 1), (2, 8.75, -7.00, null, "blau", "blau", 12.25, 3);
 
 #metemos vendas
 INSERT INTO cul_ampolla.vendes(id_client, id_ulleres, empleat)
