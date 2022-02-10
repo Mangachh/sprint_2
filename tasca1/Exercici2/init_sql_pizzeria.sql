@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS pizzeria.localitats(
 );
 
 INSERT INTO pizzeria.localitats(nom, codi_postal, id_provincia)
-VALUES("Rubí", "08254", 1), ("No sé", "54712", 2), ("Un poco de todo", "85514", 3), ("Cuarta", "85214", 3);
+VALUES("Rubí", "08254", 1), ("Malpatí", "54712", 2), ("Sanboro", "85514", 3), ("Piraina", "85214", 3);
 
 -- ADRECA {_id_adreca_, carrer, pis, numero, porta, id_localitat} ON {id_localitat} REF LOCALITAT
 CREATE TABLE IF NOT EXISTS pizzeria.adreces(
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS pizzeria.repartiment(
 );
 
 INSERT INTO pizzeria.repartiment (id_comanda, id_empleat, data_hora)
-VALUES(2, 1, "2022-12-24 13:24:12"), (3, 2, "2022-05-21 09:45:12");
+VALUES(2, 1, "2022-12-24 13:24:12"), (3, 2, "2022-05-21 09:45:12"), (1, 2, "2012-12-10");
 
 -- TIPUS_PRODUCTE{_id_producte_, nom}
 CREATE TABLE IF NOT EXISTS pizzeria.tipus_productes(
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS pizzeria.productes(
 );
 
 INSERT INTO pizzeria.productes(nom, descripcio, preu, id_tipus)
-VALUES ("Azote de mentes", "Algo super delicioso que te dejará frito", 2.54, 1), ("Medicina para la infelicidad", "Buena, bonita, barata", 8.20, 2);
+VALUES ("Azote de mentes", "Algo super delicioso que te dejará frito", 2.54, 1), ("Medicina para la infelicidad", "Buena, bonita, barata", 8.20, 2), ("Cerveza buena", "De lo mejor, más aun", 5.2, 3);
 
 -- VENDES{_id_comanda, _id_producte_, quantitat}
 CREATE TABLE IF NOT EXISTS pizzeria.vendes(
@@ -154,9 +154,27 @@ CREATE TABLE IF NOT EXISTS pizzeria.vendes(
 );
 
 INSERT INTO pizzeria.vendes(id_comanda, id_producte, quantitat)
-VALUES (1, 1, 5), (1, 2, 1), (2, 1, 50);
+VALUES (1, 1, 5), (1, 2, 1), (2, 1, 50), (1, 3, 20);
 
-SELECT productes.nom, productes.descripcio, productes.preu, tipus_productes.nom FROM pizzeria.vendes
+-- Primera proba
+-- Llista quants productes de categoria 'Begudas' s'han venut en una determinada localitat
+SELECT productes.nom AS "Producte", tipus_productes.nom AS "Tipus de Producte", localitats.nom AS "Localitat" FROM pizzeria.comandes
+JOIN pizzeria.tendes USING(id_tenda)
+JOIN pizzeria.adreces USING(id_adreca)
+JOIN pizzeria.localitats USING(id_localitat)
+JOIN pizzeria.vendes USING(id_comanda)
 JOIN pizzeria.productes USING(id_producte)
 JOIN pizzeria.tipus_productes USING(id_tipus)
-WHERE id_comanda = 1;
+WHERE localitats.nom LIKE 'Malp%' AND
+tipus_productes.nom LIKE 'beguda';
+
+-- Segona proba
+-- Llista quantes comandes ha efectuat un determinat empleat
+-- A l'exercici no hi diu que un empleat efectua una comanda, només que la reparteix si es a domicili, llavors
+-- això és el que comprobaré
+SELECT COUNT(*) FROM pizzeria.comandes
+JOIN pizzeria.repartiment USING(id_comanda)
+JOIN pizzeria.empleats USING(id_empleat)
+WHERE empleats.nom LIKE 'Empleado2';
+
+

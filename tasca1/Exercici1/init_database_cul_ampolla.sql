@@ -130,5 +130,12 @@ VALUES (1, 0.25, 1.25, "vermell", null, null, 21115.14, 1), (2, 8.75, -7.00, nul
 
 #metemos vendas
 INSERT INTO cul_ampolla.vendes(id_client, id_ulleres, empleat)
-VALUES(1,1, "Empleat 1"), (2, 2, "Empleat 2");
+VALUES(1,1, "Empleat 1"), (2, 2, "Empleat 2")
+
+-- Primera proba
+-- Llista el total de factures d'un client en un període determinat
+-- SELECT * FROM cul_ampolla.vendes;
+
+OJUUUU FALTA LA FECHA DE VENTA (no sale en ningun lado)
+
 
