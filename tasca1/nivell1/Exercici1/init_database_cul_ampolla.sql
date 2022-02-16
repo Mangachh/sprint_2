@@ -84,11 +84,13 @@ CREATE TABLE IF NOT EXISTS cul_ampolla.ulleres(
     FOREIGN KEY(id_proveidor) REFERENCES cul_ampolla.proveidors(id_proveidor)
 )character set UTF8MB4;
 
-# COMPRA {_id_compra, empleat, id_client, id_ullera} ON {id_client} REF CLIENT & ON {id_ullera} REF ULLERA
+# COMPRA {_id_compra, empleat, id_client, id_ullera data_venda} ON {id_client} REF CLIENT & ON {id_ullera} REF ULLERA
+
 CREATE TABLE IF NOT EXISTS cul_ampolla.vendes(
 	id_venda	SERIAL PRIMARY KEY,
-    id_client	BIGINT UNSIGNED,
-    id_ulleres	BIGINT UNSIGNED,
+    id_client	BIGINT UNSIGNED,    
+    id_ulleres	BIGINT UNSIGNED,    
+    data_venda	DATE,
     empleat		VARCHAR(20),
     FOREIGN KEY (id_client) REFERENCES cul_ampolla.clients(id_client),
     FOREIGN KEY (id_ulleres) REFERENCES cul_ampolla.ulleres(id_ulleres),
@@ -129,13 +131,22 @@ INSERT INTO cul_ampolla.ulleres(id_proveidor, grad_esquerra, grad_dreta, color_m
 VALUES (1, 0.25, 1.25, "vermell", null, null, 21115.14, 1), (2, 8.75, -7.00, null, "blau", "blau", 12.25, 3);
 
 #metemos vendas
-INSERT INTO cul_ampolla.vendes(id_client, id_ulleres, empleat)
-VALUES(1,1, "Empleat 1"), (2, 2, "Empleat 2")
+INSERT INTO cul_ampolla.vendes(id_client, id_ulleres, empleat, data_venda)
+VALUES(1, 1, "Empleat 1", "2001-02-02"), (2, 2, "Empleat 2", "2002-12-12"), (1, 2, "Empleat 1", "2002-02-05");
 
 -- Primera proba
 -- Llista el total de factures d'un client en un període determinat
--- SELECT * FROM cul_ampolla.vendes;
+SELECT * FROM cul_ampolla.vendes
+WHERE vendes.id_client = 1;
 
-OJUUUU FALTA LA FECHA DE VENTA (no sale en ningun lado)
+-- Llista els diferents models d'ulleres que ha venut un empleat durant un any
+SELECT * FROM cul_ampolla.vendes
+JOIN cul_ampolla.ulleres USING(id_ulleres)
+WHERE vendes.empleat = "Empleat 1";
+
+-- Llista els diferents proveïdors que han subministrat ulleres venudes amb èxit per l'òptica 
+SELECT proveidors.nom FROM cul_ampolla.proveidors
+JOIN cul_ampolla.ulleres USING(id_proveidor);
+
 
 
