@@ -15,6 +15,8 @@ MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, func
   var dbo = db.db(n_database);
   console.log("Database Created");
   
+  
+
   // creamos las colecciones, 
   createCollection(n_localitat, dbo);
   createCollection(n_client, dbo);
@@ -22,6 +24,7 @@ MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, func
   createCollection(n_comanda, dbo);
   createCollection(n_producte, dbo);
   createCollection(n_empleat, dbo);
+
   
   // ahora meteremos los documentos
   // primero localitats, oju, hacemos tabla porque nos lo pide el ejercicio
@@ -94,3 +97,4 @@ function insertManyDocuments(col_name, dbo, documents){
 	dbo.collection(col_name).insertMany(documents);
 	console.log("Inserted documents to: \""+ col_name + "\" collection");
 };
+
